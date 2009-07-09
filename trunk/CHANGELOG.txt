@@ -1,0 +1,5 @@
+09-July 2009
+ - fixed: panels within container would not be sized properly on inital rendering
+ - fixed: panels within container that have toolbars would not be sized properly
+due to some spill that happens when calculating header height
+ - fixed: collapsed panels would not always resize properly when dragging SplitBar
