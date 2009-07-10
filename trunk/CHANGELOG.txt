@@ -1,4 +1,4 @@
-V01.1
+V0.1
 10-July 2009
  - fixed: fixed sizing issues when panels are hidden
  - fixed: fixed an issue with "expand" when the dragged panel should be reset
