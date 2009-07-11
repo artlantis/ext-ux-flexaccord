@@ -104,6 +104,8 @@ Ext.namespace('Ext.ux.layout.flexAccord');
  *   again after dropped
  * - {String} _oldId Temporarily stores the id of the ownerCt where the drag operation
  *   started
+ * - {Number} _oldHeight Temporarily caches the height of an panel before it gets
+ *   collapsed during drag/drop
  * - {Ext.Element} splitEl The HTMLElement for use with the SplitBar
  * - {Ext.ux.layout.flexAccord.SplitBar} splitter The SplitBar for this panel
  *
@@ -196,10 +198,11 @@ Ext.ux.layout.flexAccord.Layout = Ext.extend(Ext.layout.ContainerLayout, {
         if (initDDOverride && c.dd) {
             c.dd.b4StartDrag = c.dd.b4StartDrag.createInterceptor(
                 function() {
-                    var panel = this.panel;
+                    var panel    = this.panel;
+                    panel._oldId  = panel.ownerCt.getId();
                     if (!panel.collapsed) {
                         panel._wasExpanded = true;
-                        panel._oldId       = panel.ownerCt.getId();
+                        panel._oldHeight   = panel.height;
                         // its important to set the height property here
                         // since we will ignore the layout's oncollapse listener
                         // which usually takes care of this
@@ -213,10 +216,14 @@ Ext.ux.layout.flexAccord.Layout = Ext.extend(Ext.layout.ContainerLayout, {
             c.dd.endDrag = c.dd.endDrag.createSequence(
                 function() {
                     var panel = this.panel;
-                    if (panel._wasExpanded === true && panel._oldId == panel.ownerCt.getId()) {
-                        panel.expand.defer(1, panel, [false]);
+                    if (panel._oldId == panel.ownerCt.getId()) {
+                        if (panel._wasExpanded) {
+                            panel.height = panel._oldHeight;
+                        }
+                        panel.ownerCt.doLayout();
                         delete panel._wasExpanded;
                     }
+                    delete panel._oldHeight;
                 }
             , c.dd);
         }
@@ -231,10 +238,6 @@ Ext.ux.layout.flexAccord.Layout = Ext.extend(Ext.layout.ContainerLayout, {
 
         if (c.resizable === false && !this._orgHeights[c.getId()]) {
             this._orgHeights[c.getId()] = c.height;
-        }
-
-        if (c.collapsed) {
-            c.height = this.getHeaderHeight(c);
         }
 
         c.header.addClass('x-accordion-hd');

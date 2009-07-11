@@ -254,12 +254,14 @@ Ext.extend(Ext.ux.layout.flexAccord.DropTarget, Ext.dd.DropTarget, {
             var newLayout = newPanel.getLayout();
             var oldLayout = oldPanel.getLayout();
 
-            if (oldPanel.getId() != newPanel.getId()) {
+            var sameContainer = oldPanel.getId() == newPanel.getId();
+
+            if (!sameContainer) {
                 oldPanel.getLayout().unregisterPanel(dd.panel, this.accordionPanel);
                 oldPanel.remove(dd.panel, false);
                 oldPanel.doLayout();
                 oldPanel.getLayout().adjustHeight();
-            };
+            }
 
             dd.panel.el.dom.parentNode.removeChild(dd.panel.el.dom);
 
@@ -269,14 +271,15 @@ Ext.extend(Ext.ux.layout.flexAccord.DropTarget, Ext.dd.DropTarget, {
                 this.accordionPanel.add(dd.panel);
             }
 
-                //this.ownerCt.getLayout().rendered = false;
-            (function() {
-                dd.panel.ownerCt.doLayout();
-                if (dd.panel._wasExpanded === true) {
-                    dd.panel.expand(false);
-                    delete dd.panel._wasExpanded;
-                }
-             }).defer(1);
+            if (!sameContainer) {
+                (function() {
+                    dd.panel.ownerCt.doLayout();
+                    if (dd.panel._wasExpanded === true) {
+                        dd.panel.expand(false);
+                        delete dd.panel._wasExpanded;
+                    }
+                 }).defer(1);
+            }
 
             this.accordionPanel.fireEvent('drop', dropEvent);
         }
