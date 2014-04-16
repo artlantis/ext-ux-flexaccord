@@ -1,6 +1,6 @@
 /**
  * Ext.ux.layout.flexAccord.Layout
- * Copyright (c) 2009, http://www.siteartwork.de
+ * Copyright (c) 2009-2014, http://www.siteartwork.de
  *
  * Ext.ux.layout.flexAccord.Layout is licensed under the terms of the
  *                  GNU Open Source LGPL 3.0
@@ -260,6 +260,10 @@ Ext.ux.layout.flexAccord.Layout = Ext.extend(Ext.layout.ContainerLayout, {
 
         if (c.resizable === false && !this._orgHeights[c.getId()]) {
             this._orgHeights[c.getId()] = c.height;
+        }
+
+        if (c.collapsed) {
+            c.height = 0;
         }
 
         c.header.addClass('x-accordion-hd');
@@ -867,9 +871,10 @@ Ext.ux.layout.flexAccord.Layout = Ext.extend(Ext.layout.ContainerLayout, {
         return this.container.getInnerHeight()-panelHeights;
     }
 
-});/**
+});
+/**
  * Ext.ux.layout.flexAccord.DropTarget
- * Copyright (c) 2009, http://www.siteartwork.de
+ * Copyright (c) 2009-2014, http://www.siteartwork.de
  *
  * Ext.ux.layout.flexAccord.DropTarget is licensed under the terms of the
  *                  GNU Open Source LGPL 3.0
@@ -1173,7 +1178,7 @@ Ext.extend(Ext.ux.layout.flexAccord.DropTarget, Ext.dd.DropTarget, {
 });
 /**
  * Ext.ux.layout.flexAccord.DropPanel
- * Copyright (c) 2009, http://www.siteartwork.de
+ * Copyright (c) 2009-2014, http://www.siteartwork.de
  *
  * Ext.ux.layout.flexAccord.DropPanel is licensed under the terms of the
  *                  GNU Open Source LGPL 3.0
@@ -1274,7 +1279,7 @@ Ext.ux.layout.flexAccord.DropPanel = Ext.extend(Ext.Panel, {
 
 });/**
  * Ext.ux.layout.flexAccord.SplitBar
- * Copyright (c) 2009, http://www.siteartwork.de
+ * Copyright (c) 2009-2014, http://www.siteartwork.de
  *
  * Ext.ux.layout.flexAccord.SplitBar is licensed under the terms of the
  *                  GNU Open Source LGPL 3.0
